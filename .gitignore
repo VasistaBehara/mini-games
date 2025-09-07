@@ -1,30 +1,156 @@
 # Dependencies
 node_modules/
-
-# Builds
-dist/
-build/
-server/dist/
-client/dist/
-
-# Caches and logs
-.vite/
-.turbo/
-*.tsbuildinfo
 npm-debug.log*
+yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
+lerna-debug.log*
 
-# Env files
-.env
-server/.env
-client/.env
+# Builds and distributions
+dist/
+build/
+out/
+.next/
+.nuxt/
+.vuepress/dist
+.serverless/
+.fusebox/
+.dynamodb/
+.tern-port
 
-# IDE
-.DS_Store
-.idea/
-.vscode/
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
 
-# Coverage
+# Coverage directory used by tools like istanbul
 coverage/
+*.lcov
+.nyc_output
+
+# Grunt intermediate storage
+.grunt
+
+# Bower dependency directory
+bower_components
+
+# node-waf configuration
+.lock-wscript
+
+# Compiled binary addons
+build/Release
+
+# Dependency directories
+jspm_packages/
+
+# TypeScript cache
+*.tsbuildinfo
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Microbundle cache
+.rpt2_cache/
+.rts2_cache_cjs/
+.rts2_cache_es/
+.rts2_cache_umd/
+
+# Optional REPL history
+.node_repl_history
+
+# Output of 'npm pack'
+*.tgz
+
+# Yarn Integrity file
+.yarn-integrity
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env.development
+.env.production
+.env.test
+
+# Parcel-bundler cache
+.cache
+.parcel-cache
+
+# Next.js build output
+.next
+
+# Nuxt.js build / generate output
+.nuxt
+dist
+
+# Gatsby files
+.cache/
+public
+
+# Storybook build outputs
+.out
+.storybook-out
+
+# Temporary folders
+tmp/
+temp/
+
+# Logs
+logs
+*.log
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# IDE and Editor files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Web development specific
+*.sass-cache/
+*.css.map
+*.js.map
+*.sourcemap
+
+# Package managers
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Testing
+coverage/
+.nyc_output/
+junit.xml
+
+# Misc
+*.tgz
+*.tar.gz
 

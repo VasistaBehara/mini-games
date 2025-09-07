@@ -1,0 +1,40 @@
+{
+  "name": "mini-games",
+  "version": "1.0.0",
+  "description": "A modern collection of classic mini games including Tic Tac Toe with AI and multiplayer modes",
+  "main": "index.html",
+  "scripts": {
+    "start": "python -m http.server 8000",
+    "serve": "npx serve .",
+    "dev": "npx live-server --port=8000 --open=/index.html"
+  },
+  "keywords": [
+    "games",
+    "tic-tac-toe",
+    "mini-games",
+    "javascript",
+    "html5",
+    "css3",
+    "ai",
+    "multiplayer",
+    "responsive",
+    "modern-ui"
+  ],
+  "author": "Mini Games Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/mini-games.git"
+  },
+  "bugs": {
+    "url": "https://github.com/your-username/mini-games/issues"
+  },
+  "homepage": "https://github.com/your-username/mini-games#readme",
+  "devDependencies": {
+    "live-server": "^1.2.2",
+    "serve": "^14.2.1"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}

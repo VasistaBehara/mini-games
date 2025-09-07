@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mini Games - Fun Collection of Classic Games</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <i class="fas fa-gamepad"></i>
+                <h1>Mini Games</h1>
+            </div>
+            <nav class="nav">
+                <a href="#home" class="nav-link active">Home</a>
+                <a href="#games" class="nav-link">Games</a>
+                <a href="#about" class="nav-link">About</a>
+            </nav>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Hero Section -->
+            <section id="home" class="hero">
+                <div class="hero-content">
+                    <h2>Welcome to Mini Games</h2>
+                    <p>Discover a collection of classic and fun mini games. Challenge yourself or play with friends!</p>
+                    <button class="cta-button" onclick="scrollToGames()">
+                        <i class="fas fa-play"></i>
+                        Start Playing
+                    </button>
+                </div>
+                <div class="hero-image">
+                    <div class="game-preview">
+                        <i class="fas fa-chess"></i>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Games Section -->
+            <section id="games" class="games-section">
+                <h2>Available Games</h2>
+                <div class="games-grid">
+                    <div class="game-card" onclick="openTicTacToe()">
+                        <div class="game-icon">
+                            <i class="fas fa-times"></i>
+                        </div>
+                        <h3>Tic Tac Toe</h3>
+                        <p>Classic 3x3 grid game. Play against AI or a friend!</p>
+                        <div class="game-features">
+                            <span class="feature">vs AI</span>
+                            <span class="feature">vs Player</span>
+                        </div>
+                    </div>
+                    
+                    <div class="game-card" onclick="openConnectDots()">
+                        <div class="game-icon">
+                            <i class="fas fa-circle"></i>
+                        </div>
+                        <h3>Connect the Dots</h3>
+                        <p>Draw lines to form boxes and claim them!</p>
+                        <div class="game-features">
+                            <span class="feature">vs AI</span>
+                            <span class="feature">vs Player</span>
+                        </div>
+                    </div>
+                    
+                    <div class="game-card coming-soon">
+                        <div class="game-icon">
+                            <i class="fas fa-dice"></i>
+                        </div>
+                        <h3>Bingo</h3>
+                        <p>Coming Soon</p>
+                        <div class="game-features">
+                            <span class="feature disabled">Coming Soon</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- About Section -->
+            <section id="about" class="about-section">
+                <h2>About Mini Games</h2>
+                <p>Mini Games is a collection of classic and entertaining games designed with modern web technologies. Each game features beautiful UI, smooth gameplay, and multiple game modes to keep you engaged.</p>
+                <div class="features">
+                    <div class="feature-item">
+                        <i class="fas fa-mobile-alt"></i>
+                        <h4>Responsive Design</h4>
+                        <p>Play on any device, anywhere</p>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-robot"></i>
+                        <h4>AI Opponents</h4>
+                        <p>Challenge smart AI players</p>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-users"></i>
+                        <h4>Multiplayer</h4>
+                        <p>Play with friends locally</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>&copy; 2024 Mini Games. Made with ❤️ for fun!</p>
+        </footer>
+    </div>
+
+    <!-- Tic Tac Toe Modal -->
+    <div id="ticTacToeModal" class="modal">
+        <div class="modal-content">
+            <!-- Mode Selection Screen -->
+            <div id="modeSelectionScreen" class="mode-selection-screen">
+                <div class="modal-header">
+                    <h2>Tic Tac Toe</h2>
+                    <button class="close-btn" onclick="closeTicTacToe()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                
+                <div class="mode-selection-content">
+                    <p class="mode-selection-description">Choose your game mode:</p>
+                    
+                    <div class="mode-options">
+                        <div class="mode-option" onclick="selectGameMode('ai')">
+                            <div class="mode-icon">
+                                <i class="fas fa-robot"></i>
+                            </div>
+                            <h3>vs AI</h3>
+                            <p>Challenge our smart AI opponent</p>
+                            <div class="mode-badge">Available</div>
+                        </div>
+                        
+                        <div class="mode-option" onclick="selectGameMode('player')">
+                            <div class="mode-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <h3>vs Player (Local)</h3>
+                            <p>Play with a friend on the same device</p>
+                            <div class="mode-badge">Available</div>
+                        </div>
+                        
+                        <div class="mode-option coming-soon" onclick="showComingSoon()">
+                            <div class="mode-icon">
+                                <i class="fas fa-globe"></i>
+                            </div>
+                            <h3>vs Player (Online)</h3>
+                            <p>Play with friends over the internet</p>
+                            <div class="mode-badge coming-soon-badge">Coming Soon</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Game Screen -->
+            <div id="gameScreen" class="game-screen" style="display: none;">
+                <div class="modal-header">
+                    <button class="back-btn" onclick="backToModeSelection()">
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                    <h2 id="gameModeTitle">Tic Tac Toe</h2>
+                    <button class="close-btn" onclick="closeTicTacToe()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+
+                <div class="game-info">
+                    <div class="current-player">
+                        <span id="currentPlayerText">Player X's Turn</span>
+                    </div>
+                    <div class="score-board">
+                        <div class="score-item">
+                            <span class="player-symbol x">X</span>
+                            <span id="playerXScore">0</span>
+                        </div>
+                        <div class="score-item">
+                            <span class="player-symbol o">O</span>
+                            <span id="playerOScore">0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="game-board" id="gameBoard">
+                    <!-- Game cells will be generated by JavaScript -->
+                </div>
+
+                <div class="game-controls">
+                    <button class="control-btn restart-btn" onclick="restartGame()">
+                        <i class="fas fa-redo"></i>
+                        Restart Game
+                    </button>
+                    <button class="control-btn reset-scores-btn" onclick="resetScores()">
+                        <i class="fas fa-trash"></i>
+                        Reset Scores
+                    </button>
+                </div>
+
+                <div id="gameMessage" class="game-message"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Connect the Dots Modal -->
+    <div id="connectDotsModal" class="modal">
+        <div class="modal-content">
+            <!-- Mode Selection Screen -->
+            <div id="connectDotsModeSelection" class="mode-selection-screen">
+                <div class="modal-header">
+                    <h2>Connect the Dots</h2>
+                    <button class="close-btn" onclick="closeConnectDots()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                
+                <div class="mode-selection-content">
+                    <p class="mode-selection-description">Choose your game mode:</p>
+                    
+                    <div class="mode-options">
+                        <div class="mode-option" onclick="selectConnectDotsMode('ai')">
+                            <div class="mode-icon">
+                                <i class="fas fa-robot"></i>
+                            </div>
+                            <h3>vs AI</h3>
+                            <p>Challenge our smart AI opponent</p>
+                            <div class="mode-badge">Available</div>
+                        </div>
+                        
+                        <div class="mode-option" onclick="selectConnectDotsMode('player')">
+                            <div class="mode-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <h3>vs Player (Local)</h3>
+                            <p>Play with a friend on the same device</p>
+                            <div class="mode-badge">Available</div>
+                        </div>
+                        
+                        <div class="mode-option coming-soon" onclick="showConnectDotsComingSoon()">
+                            <div class="mode-icon">
+                                <i class="fas fa-globe"></i>
+                            </div>
+                            <h3>vs Player (Online)</h3>
+                            <p>Play with friends over the internet</p>
+                            <div class="mode-badge coming-soon-badge">Coming Soon</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Game Screen -->
+            <div id="connectDotsGameScreen" class="game-screen" style="display: none;">
+                <div class="modal-header">
+                    <button class="back-btn" onclick="backToConnectDotsModeSelection()">
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                    <h2 id="connectDotsModeTitle">Connect the Dots</h2>
+                    <button class="close-btn" onclick="closeConnectDots()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+
+                <div class="connect-dots-game-info">
+                    <div class="current-player">
+                        <span id="connectDotsCurrentPlayer">Player Red's Turn</span>
+                    </div>
+                    <div class="score-board">
+                        <div class="score-item">
+                            <span class="player-symbol red">R</span>
+                            <span id="connectDotsRedScore">0</span>
+                        </div>
+                        <div class="score-item">
+                            <span class="player-symbol blue">B</span>
+                            <span id="connectDotsBlueScore">0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="connect-dots-board" id="connectDotsBoard">
+                    <!-- Game board will be generated by JavaScript -->
+                </div>
+
+                <div class="game-controls">
+                    <button class="control-btn restart-btn" onclick="restartConnectDotsGame()">
+                        <i class="fas fa-redo"></i>
+                        Restart Game
+                    </button>
+                    <button class="control-btn reset-scores-btn" onclick="resetConnectDotsScores()">
+                        <i class="fas fa-trash"></i>
+                        Reset Scores
+                    </button>
+                </div>
+
+                <div id="connectDotsMessage" class="game-message"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script src="connect-dots.js"></script>
+</body>
+</html>
