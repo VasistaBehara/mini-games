@@ -61,6 +61,7 @@ function createConnectDotsBoard() {
     
     const size = connectDotsState.size;
     
+    // Create dots
     for (let row = 0; row < size; row++) {
         for (let col = 0; col < size; col++) {
             const dot = document.createElement('div');
@@ -68,37 +69,16 @@ function createConnectDotsBoard() {
             dot.setAttribute('data-row', row);
             dot.setAttribute('data-col', col);
             
-            // Add horizontal line (to the right)
-            if (col < size - 1) {
-                const hLine = document.createElement('div');
-                hLine.className = 'line-horizontal';
-                hLine.setAttribute('data-row', row);
-                hLine.setAttribute('data-col', col);
-                hLine.setAttribute('data-direction', 'horizontal');
-                hLine.addEventListener('click', () => handleConnectDotsLineClick(row, col, 'horizontal'));
-                hLine.addEventListener('mouseenter', () => handleConnectDotsHover(row, col, 'horizontal', true));
-                hLine.addEventListener('mouseleave', () => handleConnectDotsHover(row, col, 'horizontal', false));
-                dot.appendChild(hLine);
-            }
-            
-            // Add vertical line (downward)
-            if (row < size - 1) {
-                const vLine = document.createElement('div');
-                vLine.className = 'line-vertical';
-                vLine.setAttribute('data-row', row);
-                vLine.setAttribute('data-col', col);
-                vLine.setAttribute('data-direction', 'vertical');
-                vLine.addEventListener('click', () => handleConnectDotsLineClick(row, col, 'vertical'));
-                vLine.addEventListener('mouseenter', () => handleConnectDotsHover(row, col, 'vertical', true));
-                vLine.addEventListener('mouseleave', () => handleConnectDotsHover(row, col, 'vertical', false));
-                dot.appendChild(vLine);
-            }
+            // Add drag event listeners
+            dot.addEventListener('mousedown', (e) => handleDotMouseDown(e, row, col));
+            dot.addEventListener('mouseenter', (e) => handleDotMouseEnter(e, row, col));
+            dot.addEventListener('mouseup', (e) => handleDotMouseUp(e, row, col));
             
             connectDotsBoard.appendChild(dot);
         }
     }
     
-    // Add boxes
+    // Create boxes
     for (let row = 0; row < size - 1; row++) {
         for (let col = 0; col < size - 1; col++) {
             const box = document.createElement('div');
@@ -111,69 +91,294 @@ function createConnectDotsBoard() {
             box.style.top = '50%';
             box.style.left = '50%';
             box.style.transform = 'translate(-50%, -50%)';
-            box.style.width = '20px';
-            box.style.height = '20px';
+            box.style.width = '40px';
+            box.style.height = '40px';
             connectDotsBoard.appendChild(box);
         }
     }
+    
+    // Add global mouse events for dragging
+    document.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mouseup', handleMouseUp);
 }
 
-function handleConnectDotsLineClick(row, col, direction) {
-    if (!connectDotsState.gameActive) return;
+function handleDotMouseDown(e, row, col) {
+    if (!connectDotsState.gameActive || connectDotsState.dragging) return;
     
-    const key = `${row}-${col}`;
-    const lines = connectDotsState.lines[direction];
+    e.preventDefault();
+    connectDotsState.dragging = true;
+    connectDotsState.dragStartDot = { row, col };
     
-    if (lines[key]) return; // Line already exists
+    // Highlight the starting dot
+    const dot = e.target;
+    dot.classList.add('dragging');
     
-    // Make the move
-    lines[key] = connectDotsState.currentPlayer;
+    // Highlight valid target dots
+    highlightValidTargets(row, col);
+}
+
+function handleDotMouseEnter(e, row, col) {
+    if (!connectDotsState.dragging || !connectDotsState.dragStartDot) return;
     
-    // Update visual
-    const lineElement = document.querySelector(`[data-row="${row}"][data-col="${col}"][data-direction="${direction}"]`);
-    if (lineElement) {
-        lineElement.classList.add(connectDotsState.currentPlayer);
-    }
+    const startDot = connectDotsState.dragStartDot;
     
-    // Check for completed boxes
-    const boxesCompleted = checkConnectDotsBoxes(row, col, direction);
-    
-    if (boxesCompleted.length === 0) {
-        // No boxes completed, switch player
-        switchConnectDotsPlayer();
-    } else {
-        // Boxes completed, current player continues
-        updateConnectDotsScores(boxesCompleted.length);
-        showConnectDotsMessage(`${connectDotsState.currentPlayer.toUpperCase()} completed ${boxesCompleted.length} box(es)!`, 'win');
+    // Check if this is a valid connection
+    if (isValidConnection(startDot.row, startDot.col, row, col)) {
+        const direction = getDirection(startDot.row, startDot.col, row, col);
+        const lineKey = getLineKey(startDot.row, startDot.col, direction);
         
-        // Check if game is over
-        if (isConnectDotsGameOver()) {
-            endConnectDotsGame();
+        // Check if line already exists
+        if (!isLineExists(lineKey, direction)) {
+            // Highlight this dot as valid target
+            e.target.classList.add('valid-target');
+            
+            // Create visual drag line
+            createDragLine(startDot.row, startDot.col, row, col);
+        }
+    }
+}
+
+function handleDotMouseUp(e, row, col) {
+    if (!connectDotsState.dragging || !connectDotsState.dragStartDot) return;
+    
+    const startDot = connectDotsState.dragStartDot;
+    
+    // Check if this is a valid connection
+    if (isValidConnection(startDot.row, startDot.col, row, col)) {
+        const direction = getDirection(startDot.row, startDot.col, row, col);
+        const lineKey = getLineKey(startDot.row, startDot.col, direction);
+        
+        // Check if line already exists
+        if (!isLineExists(lineKey, direction)) {
+            // Draw the line
+            drawLine(startDot.row, startDot.col, row, col, direction);
+            
+            // Check for completed boxes
+            const boxesCompleted = checkConnectDotsBoxes(startDot.row, startDot.col, direction);
+            
+            if (boxesCompleted.length === 0) {
+                // No boxes completed, switch player
+                switchConnectDotsPlayer();
+            } else {
+                // Boxes completed, current player continues
+                updateConnectDotsScores(boxesCompleted.length);
+                showConnectDotsMessage(`${connectDotsState.currentPlayer.toUpperCase()} completed ${boxesCompleted.length} box(es)!`, 'win');
+                
+                // Check if game is over
+                if (isConnectDotsGameOver()) {
+                    endConnectDotsGame();
+                }
+            }
+            
+            // AI move if in AI mode
+            if (connectDotsState.gameMode === 'ai' && connectDotsState.currentPlayer === 'blue' && connectDotsState.gameActive) {
+                setTimeout(() => {
+                    if (connectDotsState.gameActive) {
+                        makeConnectDotsAIMove();
+                    }
+                }, 500);
+            }
         }
     }
     
-    // AI move if in AI mode
-    if (connectDotsState.gameMode === 'ai' && connectDotsState.currentPlayer === 'blue' && connectDotsState.gameActive) {
-        setTimeout(() => {
-            if (connectDotsState.gameActive) {
-                makeConnectDotsAIMove();
-            }
-        }, 500);
+    // Clean up dragging state
+    cleanupDragging();
+}
+
+function handleMouseMove(e) {
+    if (!connectDotsState.dragging || !connectDotsState.dragLine) return;
+    
+    // Update drag line position to follow mouse
+    const rect = connectDotsBoard.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    
+    if (connectDotsState.dragStartDot) {
+        const startDot = document.querySelector(`[data-row="${connectDotsState.dragStartDot.row}"][data-col="${connectDotsState.dragStartDot.col}"]`);
+        if (startDot) {
+            const startRect = startDot.getBoundingClientRect();
+            const startX = startRect.left - rect.left + startRect.width / 2;
+            const startY = startRect.top - rect.top + startRect.height / 2;
+            
+            const dx = x - startX;
+            const dy = y - startY;
+            const length = Math.sqrt(dx * dx + dy * dy);
+            const angle = Math.atan2(dy, dx) * 180 / Math.PI;
+            
+            connectDotsState.dragLine.style.left = startX + 'px';
+            connectDotsState.dragLine.style.top = startY + 'px';
+            connectDotsState.dragLine.style.width = length + 'px';
+            connectDotsState.dragLine.style.height = '6px';
+            connectDotsState.dragLine.style.transform = `rotate(${angle}deg)`;
+            connectDotsState.dragLine.style.transformOrigin = '0 50%';
+        }
     }
 }
 
-function handleConnectDotsHover(row, col, direction, isEntering) {
-    const lineElement = document.querySelector(`[data-row="${row}"][data-col="${col}"][data-direction="${direction}"]`);
-    if (!lineElement || lineElement.classList.contains('red') || lineElement.classList.contains('blue')) {
-        return;
+function handleMouseUp(e) {
+    if (connectDotsState.dragging) {
+        cleanupDragging();
+    }
+}
+
+function highlightValidTargets(row, col) {
+    const size = connectDotsState.size;
+    
+    // Clear previous highlights
+    document.querySelectorAll('.dot.valid-target').forEach(dot => {
+        dot.classList.remove('valid-target');
+    });
+    
+    // Check all adjacent dots
+    const directions = [
+        { dr: -1, dc: 0 }, // up
+        { dr: 1, dc: 0 },  // down
+        { dr: 0, dc: -1 }, // left
+        { dr: 0, dc: 1 }   // right
+    ];
+    
+    directions.forEach(dir => {
+        const newRow = row + dir.dr;
+        const newCol = col + dir.dc;
+        
+        if (newRow >= 0 && newRow < size && newCol >= 0 && newCol < size) {
+            const direction = getDirection(row, col, newRow, newCol);
+            const lineKey = getLineKey(row, col, direction);
+            
+            if (!isLineExists(lineKey, direction)) {
+                const dot = document.querySelector(`[data-row="${newRow}"][data-col="${newCol}"]`);
+                if (dot) {
+                    dot.classList.add('valid-target');
+                }
+            }
+        }
+    });
+}
+
+function isValidConnection(row1, col1, row2, col2) {
+    // Must be adjacent (horizontally or vertically)
+    const rowDiff = Math.abs(row1 - row2);
+    const colDiff = Math.abs(col1 - col2);
+    
+    return (rowDiff === 1 && colDiff === 0) || (rowDiff === 0 && colDiff === 1);
+}
+
+function getDirection(row1, col1, row2, col2) {
+    if (row1 === row2) {
+        return 'horizontal';
+    } else {
+        return 'vertical';
+    }
+}
+
+function getLineKey(row, col, direction) {
+    return `${row}-${col}`;
+}
+
+function isLineExists(lineKey, direction) {
+    return connectDotsState.lines[direction][lineKey] !== undefined;
+}
+
+function createDragLine(row1, col1, row2, col2) {
+    // Remove existing drag line
+    if (connectDotsState.dragLine) {
+        connectDotsState.dragLine.remove();
     }
     
-    if (isEntering) {
-        lineElement.style.background = connectDotsState.currentPlayer === 'red' ? 
-            'rgba(255, 71, 87, 0.3)' : 'rgba(55, 66, 250, 0.3)';
-    } else {
-        lineElement.style.background = 'transparent';
+    const dragLine = document.createElement('div');
+    dragLine.className = `drag-line ${connectDotsState.currentPlayer}`;
+    
+    // Position the drag line between the two dots
+    const startDot = document.querySelector(`[data-row="${row1}"][data-col="${col1}"]`);
+    const endDot = document.querySelector(`[data-row="${row2}"][data-col="${col2}"]`);
+    
+    if (startDot && endDot) {
+        const startRect = startDot.getBoundingClientRect();
+        const endRect = endDot.getBoundingClientRect();
+        const boardRect = connectDotsBoard.getBoundingClientRect();
+        
+        const startX = startRect.left - boardRect.left + startRect.width / 2;
+        const startY = startRect.top - boardRect.top + startRect.height / 2;
+        const endX = endRect.left - boardRect.left + endRect.width / 2;
+        const endY = endRect.top - boardRect.top + endRect.height / 2;
+        
+        const dx = endX - startX;
+        const dy = endY - startY;
+        const length = Math.sqrt(dx * dx + dy * dy);
+        const angle = Math.atan2(dy, dx) * 180 / Math.PI;
+        
+        dragLine.style.left = startX + 'px';
+        dragLine.style.top = startY + 'px';
+        dragLine.style.width = length + 'px';
+        dragLine.style.height = '6px';
+        dragLine.style.transform = `rotate(${angle}deg)`;
+        dragLine.style.transformOrigin = '0 50%';
     }
+    
+    connectDotsBoard.appendChild(dragLine);
+    connectDotsState.dragLine = dragLine;
+}
+
+function drawLine(row1, col1, row2, col2, direction) {
+    const lineKey = getLineKey(row1, col1, direction);
+    connectDotsState.lines[direction][lineKey] = connectDotsState.currentPlayer;
+    
+    // Create visual line element
+    const lineElement = document.createElement('div');
+    lineElement.className = `game-line ${connectDotsState.currentPlayer}`;
+    lineElement.setAttribute('data-row', row1);
+    lineElement.setAttribute('data-col', col1);
+    lineElement.setAttribute('data-direction', direction);
+    
+    // Position the line between the two dots
+    const startDot = document.querySelector(`[data-row="${row1}"][data-col="${col1}"]`);
+    const endDot = document.querySelector(`[data-row="${row2}"][data-col="${col2}"]`);
+    
+    if (startDot && endDot) {
+        const startRect = startDot.getBoundingClientRect();
+        const endRect = endDot.getBoundingClientRect();
+        const boardRect = connectDotsBoard.getBoundingClientRect();
+        
+        const startX = startRect.left - boardRect.left + startRect.width / 2;
+        const startY = startRect.top - boardRect.top + startRect.height / 2;
+        const endX = endRect.left - boardRect.left + endRect.width / 2;
+        const endY = endRect.top - boardRect.top + endRect.height / 2;
+        
+        const dx = endX - startX;
+        const dy = endY - startY;
+        const length = Math.sqrt(dx * dx + dy * dy);
+        const angle = Math.atan2(dy, dx) * 180 / Math.PI;
+        
+        lineElement.style.left = startX + 'px';
+        lineElement.style.top = startY + 'px';
+        lineElement.style.width = length + 'px';
+        lineElement.style.height = '6px';
+        lineElement.style.transform = `rotate(${angle}deg)`;
+        lineElement.style.transformOrigin = '0 50%';
+    }
+    
+    connectDotsBoard.appendChild(lineElement);
+}
+
+function cleanupDragging() {
+    connectDotsState.dragging = false;
+    connectDotsState.dragStartDot = null;
+    
+    // Remove drag line
+    if (connectDotsState.dragLine) {
+        connectDotsState.dragLine.remove();
+        connectDotsState.dragLine = null;
+    }
+    
+    // Remove dragging class from all dots
+    document.querySelectorAll('.dot.dragging').forEach(dot => {
+        dot.classList.remove('dragging');
+    });
+    
+    // Remove valid target highlights
+    document.querySelectorAll('.dot.valid-target').forEach(dot => {
+        dot.classList.remove('valid-target');
+    });
 }
 
 function checkConnectDotsBoxes(row, col, direction) {
@@ -257,7 +462,40 @@ function makeConnectDotsAIMove() {
     const bestMove = getConnectDotsBestMove(availableMoves);
     const { row, col, direction } = bestMove;
     
-    handleConnectDotsLineClick(row, col, direction);
+    // Determine the end position for the line
+    let endRow = row, endCol = col;
+    if (direction === 'horizontal') {
+        endCol = col + 1;
+    } else {
+        endRow = row + 1;
+    }
+    
+    // Simulate AI move by drawing line directly
+    drawLine(row, col, endRow, endCol, direction);
+    
+    // Check for completed boxes
+    const boxesCompleted = checkConnectDotsBoxes(row, col, direction);
+    
+    if (boxesCompleted.length === 0) {
+        // No boxes completed, switch player
+        switchConnectDotsPlayer();
+    } else {
+        // Boxes completed, AI continues
+        updateConnectDotsScores(boxesCompleted.length);
+        showConnectDotsMessage(`AI completed ${boxesCompleted.length} box(es)!`, 'win');
+        
+        // Check if game is over
+        if (isConnectDotsGameOver()) {
+            endConnectDotsGame();
+        } else {
+            // AI continues if it completed boxes
+            setTimeout(() => {
+                if (connectDotsState.gameActive && connectDotsState.currentPlayer === 'blue') {
+                    makeConnectDotsAIMove();
+                }
+            }, 500);
+        }
+    }
 }
 
 function getConnectDotsAvailableMoves() {
@@ -429,6 +667,9 @@ function resetConnectDotsGame() {
     connectDotsState.gameActive = true;
     connectDotsState.lines = { horizontal: {}, vertical: {} };
     connectDotsState.boxes = {};
+    connectDotsState.dragging = false;
+    connectDotsState.dragStartDot = null;
+    connectDotsState.dragLine = null;
     
     createConnectDotsBoard();
     updateConnectDotsDisplay();

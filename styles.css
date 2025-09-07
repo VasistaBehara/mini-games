@@ -749,13 +749,14 @@ body {
 
 .connect-dots-board {
     display: grid;
-    gap: 2px;
+    gap: 40px;
     background: #333;
-    padding: 20px;
+    padding: 30px;
     border-radius: 15px;
     margin: 0 auto 2rem;
     max-width: 500px;
     position: relative;
+    user-select: none;
 }
 
 .connect-dots-board.grid-5 {
@@ -779,63 +780,49 @@ body {
     background: white;
     border-radius: 50%;
     position: relative;
-    cursor: pointer;
+    cursor: crosshair;
     transition: all 0.2s ease;
+    z-index: 10;
+    margin: auto;
 }
 
 .dot:hover {
     background: #f0f0f0;
-    transform: scale(1.1);
+    transform: scale(1.2);
 }
 
-.line-horizontal {
+.dot.dragging {
+    background: #ffeb3b;
+    transform: scale(1.3);
+}
+
+.dot.valid-target {
+    background: #4CAF50;
+    transform: scale(1.2);
+}
+
+.game-line {
     position: absolute;
-    height: 4px;
-    background: transparent;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 20px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    z-index: 2;
-}
-
-.line-vertical {
-    position: absolute;
-    width: 4px;
-    background: transparent;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    height: 20px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    z-index: 2;
-}
-
-.line-horizontal:hover {
-    background: rgba(255, 107, 107, 0.3);
-}
-
-.line-vertical:hover {
-    background: rgba(255, 107, 107, 0.3);
-}
-
-.line-horizontal.red {
     background: #ff4757;
+    z-index: 5;
+    border-radius: 3px;
+    pointer-events: none;
 }
 
-.line-vertical.red {
-    background: #ff4757;
-}
-
-.line-horizontal.blue {
+.game-line.blue {
     background: #3742fa;
 }
 
-.line-vertical.blue {
-    background: #3742fa;
+.drag-line {
+    position: absolute;
+    background: rgba(255, 107, 107, 0.7);
+    z-index: 15;
+    pointer-events: none;
+    border-radius: 3px;
+}
+
+.drag-line.blue {
+    background: rgba(55, 66, 250, 0.7);
 }
 
 .box {
@@ -843,15 +830,17 @@ body {
     background: transparent;
     border: 2px solid transparent;
     transition: all 0.3s ease;
+    z-index: 1;
+    border-radius: 5px;
 }
 
 .box.red {
-    background: rgba(255, 71, 87, 0.2);
+    background: #ff4757;
     border-color: #ff4757;
 }
 
 .box.blue {
-    background: rgba(55, 66, 250, 0.2);
+    background: #3742fa;
     border-color: #3742fa;
 }
 

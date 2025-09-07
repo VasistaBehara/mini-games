@@ -24,7 +24,10 @@ let connectDotsState = {
         horizontal: {}, // key: "row-col" format
         vertical: {}    // key: "row-col" format
     },
-    boxes: {} // key: "row-col" format, value: 'red' or 'blue'
+    boxes: {}, // key: "row-col" format, value: 'red' or 'blue'
+    dragging: false,
+    dragStartDot: null,
+    dragLine: null
 };
 
 // DOM Elements
