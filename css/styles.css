@@ -1020,3 +1020,390 @@ button {
     font-size: var(--font-size-sm);
     margin-top: auto;
 }
+
+/* ========================================
+   Dots and Boxes - Setup Screen
+   ======================================== */
+.dab-setup {
+    padding: var(--space-2xl);
+    max-width: 500px;
+    width: 100%;
+}
+
+.setup-title {
+    font-size: var(--font-size-xl);
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: var(--space-xl);
+    color: var(--color-text-primary);
+}
+
+.setup-group {
+    margin-bottom: var(--space-xl);
+}
+
+.setup-label {
+    display: block;
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: var(--space-md);
+}
+
+.setup-options {
+    display: flex;
+    gap: var(--space-sm);
+    flex-wrap: wrap;
+}
+
+.setup-option {
+    padding: var(--space-sm) var(--space-lg);
+    font-size: var(--font-size-md);
+    font-weight: 600;
+    background: var(--color-bg-tertiary);
+    border: 2px solid transparent;
+    border-radius: var(--radius-md);
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.setup-option:hover {
+    border-color: var(--color-primary);
+    color: var(--color-text-primary);
+}
+
+.setup-option.active {
+    background: var(--color-primary);
+    color: white;
+    border-color: var(--color-primary);
+}
+
+/* Player Configuration */
+.player-config {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+}
+
+.player-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    padding: var(--space-sm) var(--space-md);
+    background: var(--color-bg-tertiary);
+    border-radius: var(--radius-md);
+}
+
+.player-dot {
+    width: 20px;
+    height: 20px;
+    border-radius: var(--radius-full);
+    flex-shrink: 0;
+}
+
+.player-dot.p1 {
+    background: #06b6d4;
+}
+
+.player-dot.p2 {
+    background: #ec4899;
+}
+
+.player-dot.p3 {
+    background: #eab308;
+}
+
+.player-dot.p4 {
+    background: #8b5cf6;
+}
+
+.player-name {
+    flex: 1;
+    font-weight: 600;
+}
+
+.player-type-label {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    padding: var(--space-xs) var(--space-md);
+    background: var(--color-bg-card);
+    border-radius: var(--radius-sm);
+}
+
+.player-type-select {
+    padding: var(--space-xs) var(--space-md);
+    font-size: var(--font-size-sm);
+    font-family: inherit;
+    background: var(--color-bg-card);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-sm);
+    color: var(--color-text-primary);
+    cursor: pointer;
+}
+
+.player-type-select:focus {
+    outline: none;
+    border-color: var(--color-primary);
+}
+
+/* ========================================
+   Dots and Boxes - Game Screen
+   ======================================== */
+.dab-game {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-xl);
+    width: 100%;
+}
+
+.dab-game.hidden {
+    display: none;
+}
+
+/* Scoreboard */
+.dab-scoreboard {
+    display: flex;
+    gap: var(--space-lg);
+    padding: var(--space-md) var(--space-xl);
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.dab-score-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: var(--space-sm) var(--space-md);
+    border-radius: var(--radius-md);
+    background: var(--color-bg-tertiary);
+    transition: all var(--transition-fast);
+}
+
+.dab-score-item.active {
+    box-shadow: 0 0 15px rgba(99, 102, 241, 0.5);
+    transform: scale(1.05);
+}
+
+.dab-score-item .player-dot {
+    width: 16px;
+    height: 16px;
+}
+
+.dab-score-item .name {
+    font-weight: 600;
+    font-size: var(--font-size-sm);
+}
+
+.dab-score-item .score {
+    font-weight: 800;
+    font-size: var(--font-size-lg);
+    min-width: 30px;
+    text-align: center;
+}
+
+/* Game Board */
+.dab-board {
+    display: grid;
+    gap: 0;
+    background: var(--color-bg-card);
+    padding: var(--space-lg);
+    border-radius: var(--radius-xl);
+    border: var(--border-glass);
+}
+
+.dab-row {
+    display: flex;
+}
+
+/* Dots */
+.dab-dot {
+    width: 16px;
+    height: 16px;
+    background: var(--color-text-primary);
+    border-radius: var(--radius-full);
+    z-index: 10;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+}
+
+/* Lines */
+.dab-line {
+    background: transparent;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    position: relative;
+}
+
+.dab-line.horizontal {
+    width: 50px;
+    height: 16px;
+}
+
+.dab-line.vertical {
+    width: 16px;
+    height: 50px;
+}
+
+.dab-line::after {
+    content: '';
+    position: absolute;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    transition: all var(--transition-fast);
+}
+
+.dab-line.horizontal::after {
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 6px;
+    transform: translateY(-50%);
+}
+
+.dab-line.vertical::after {
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 6px;
+    transform: translateX(-50%);
+}
+
+.dab-line:not(.drawn):hover::after {
+    background: rgba(99, 102, 241, 0.6);
+}
+
+.dab-line.drawn {
+    cursor: default;
+}
+
+.dab-line.drawn::after {
+    background: var(--color-text-primary);
+}
+
+/* Player-colored lines */
+.dab-line.drawn.p1::after {
+    background: #06b6d4;
+}
+
+.dab-line.drawn.p2::after {
+    background: #ec4899;
+}
+
+.dab-line.drawn.p3::after {
+    background: #eab308;
+}
+
+.dab-line.drawn.p4::after {
+    background: #8b5cf6;
+}
+
+/* Boxes */
+.dab-box {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--font-size-lg);
+    font-weight: 800;
+    color: white;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    transition: all var(--transition-normal);
+}
+
+.dab-box.claimed {
+    animation: boxClaimed 0.4s ease-out;
+}
+
+.dab-box.p1 {
+    background: rgba(6, 182, 212, 0.4);
+}
+
+.dab-box.p2 {
+    background: rgba(236, 72, 153, 0.4);
+}
+
+.dab-box.p3 {
+    background: rgba(234, 179, 8, 0.4);
+}
+
+.dab-box.p4 {
+    background: rgba(139, 92, 246, 0.4);
+}
+
+/* Spacer for grid alignment */
+.dab-spacer {
+    width: 50px;
+    height: 16px;
+}
+
+@keyframes boxClaimed {
+    0% {
+        transform: scale(0);
+        opacity: 0;
+    }
+
+    50% {
+        transform: scale(1.2);
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* ========================================
+   Responsive - Dots and Boxes
+   ======================================== */
+@media (max-width: 600px) {
+    .dab-line.horizontal {
+        width: 40px;
+    }
+
+    .dab-line.vertical {
+        height: 40px;
+    }
+
+    .dab-box {
+        width: 40px;
+        height: 40px;
+        font-size: var(--font-size-md);
+    }
+
+    .dab-spacer {
+        width: 40px;
+    }
+
+    .dab-dot {
+        width: 12px;
+        height: 12px;
+    }
+
+    .dab-setup {
+        padding: var(--space-lg);
+    }
+}
+
+@media (max-width: 400px) {
+    .dab-line.horizontal {
+        width: 30px;
+    }
+
+    .dab-line.vertical {
+        height: 30px;
+    }
+
+    .dab-box {
+        width: 30px;
+        height: 30px;
+        font-size: var(--font-size-sm);
+    }
+
+    .dab-spacer {
+        width: 30px;
+    }
+}
