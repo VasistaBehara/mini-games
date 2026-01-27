@@ -736,6 +736,515 @@ body {
     }
 }
 
+/* Bingo Game Styles */
+.bingo-modal-content {
+    max-width: 800px;
+    max-height: 90vh;
+}
+
+.bingo-game-selection {
+    text-align: center;
+}
+
+.bingo-selection-content {
+    padding: 2rem 0;
+}
+
+.bingo-selection-description {
+    font-size: 1.2rem;
+    color: #666;
+    margin-bottom: 2rem;
+}
+
+.bingo-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.bingo-option {
+    background: white;
+    border: 2px solid #f0f0f0;
+    border-radius: 20px;
+    padding: 2rem 1.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.bingo-option:hover {
+    border-color: #ff6b6b;
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(255, 107, 107, 0.2);
+}
+
+.bingo-icon {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1rem;
+    font-size: 1.5rem;
+    color: white;
+}
+
+.bingo-option h3 {
+    font-size: 1.3rem;
+    margin-bottom: 0.5rem;
+    color: #333;
+}
+
+.bingo-option p {
+    color: #666;
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+}
+
+.bingo-badge {
+    background: #e8f4fd;
+    color: #0066cc;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    display: inline-block;
+}
+
+/* Host Screen Styles */
+.bingo-host-screen {
+    padding: 1rem;
+}
+
+.host-controls {
+    display: grid;
+    gap: 2rem;
+}
+
+.game-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 15px;
+}
+
+.game-id {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.game-id label {
+    font-weight: 600;
+    color: #333;
+}
+
+.game-id span {
+    font-family: monospace;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #ff6b6b;
+    background: white;
+    padding: 0.3rem 0.8rem;
+    border-radius: 8px;
+    border: 2px solid #ff6b6b;
+}
+
+.copy-btn {
+    background: #ff6b6b;
+    color: white;
+    border: none;
+    padding: 0.3rem 0.6rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.copy-btn:hover {
+    background: #ee5a24;
+    transform: scale(1.05);
+}
+
+.player-count {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #333;
+}
+
+.players-list h3 {
+    margin-bottom: 1rem;
+    color: #333;
+}
+
+.players-list-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.player-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.8rem;
+    background: white;
+    border-radius: 10px;
+    border: 2px solid #f0f0f0;
+    transition: all 0.3s ease;
+}
+
+.player-item.host-player {
+    border-color: #ff6b6b;
+    background: #fff5f5;
+}
+
+.player-item i {
+    color: #ff6b6b;
+}
+
+.host-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+/* Join Screen Styles */
+.bingo-join-screen {
+    padding: 1rem;
+}
+
+.join-controls {
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.join-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.form-group label {
+    font-weight: 600;
+    color: #333;
+}
+
+.form-group input {
+    padding: 0.8rem;
+    border: 2px solid #f0f0f0;
+    border-radius: 10px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #ff6b6b;
+    box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.1);
+}
+
+/* Game Screen Styles */
+.bingo-game-screen {
+    padding: 1rem;
+}
+
+.bingo-game-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 15px;
+}
+
+.current-number {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #333;
+}
+
+.current-number span:last-child {
+    color: #ff6b6b;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.game-status {
+    font-size: 1rem;
+    color: #666;
+}
+
+.bingo-game-layout {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.bingo-board-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.bingo-board {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 2px;
+    background: #333;
+    padding: 10px;
+    border-radius: 15px;
+    max-width: 400px;
+    width: 100%;
+}
+
+.bingo-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.called-numbers-section,
+.game-actions-section,
+.players-status-section {
+    background: #f8f9fa;
+    border-radius: 15px;
+    padding: 1rem;
+}
+
+.called-numbers-section h3,
+.game-actions-section h3,
+.players-status-section h3 {
+    margin-bottom: 1rem;
+    color: #333;
+    font-size: 1.1rem;
+}
+
+.called-numbers-list {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0.3rem;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.called-number {
+    background: #ff6b6b;
+    color: white;
+    padding: 0.5rem;
+    border-radius: 8px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+
+.called-number.latest {
+    background: #4CAF50;
+    transform: scale(1.1);
+    box-shadow: 0 4px 8px rgba(76, 175, 80, 0.3);
+}
+
+.game-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+.players-status-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.player-status-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.6rem;
+    background: white;
+    border-radius: 8px;
+    border: 2px solid #f0f0f0;
+    transition: all 0.3s ease;
+}
+
+.player-status-item.winner {
+    border-color: #4CAF50;
+    background: #f0fff4;
+}
+
+.player-status-item.winner .player-name {
+    color: #4CAF50;
+    font-weight: bold;
+}
+
+.player-name {
+    font-weight: 500;
+    color: #333;
+}
+
+.player-status {
+    font-size: 0.8rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: 12px;
+    font-weight: 500;
+}
+
+.player-status.playing {
+    background: #e3f2fd;
+    color: #1976d2;
+}
+
+.player-status.bingo {
+    background: #4CAF50;
+    color: white;
+}
+
+.player-status.waiting {
+    background: #fff3e0;
+    color: #f57c00;
+}
+
+.bingo-cell {
+    aspect-ratio: 1;
+    background: white;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #333;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.bingo-cell:hover {
+    background: #f0f0f0;
+    transform: scale(1.05);
+}
+
+.bingo-cell.marked {
+    background: #ff6b6b;
+    color: white;
+    transform: scale(0.95);
+}
+
+.bingo-cell.marked::after {
+    content: '✓';
+    position: absolute;
+    font-size: 1.5rem;
+    color: white;
+}
+
+.bingo-controls {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-bottom: 1rem;
+}
+
+.call-bingo-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Responsive Bingo */
+@media (max-width: 768px) {
+    .bingo-modal-content {
+        max-width: 95%;
+        margin: 2% auto;
+    }
+    
+    .bingo-options {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .bingo-option {
+        padding: 1.5rem 1rem;
+    }
+    
+    .game-info {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+    }
+    
+    .host-actions {
+        flex-direction: column;
+    }
+    
+    .bingo-game-info {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+    }
+    
+    .bingo-game-layout {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .bingo-sidebar {
+        order: -1;
+    }
+    
+    .called-numbers-list {
+        grid-template-columns: repeat(6, 1fr);
+    }
+    
+    .bingo-board {
+        max-width: 300px;
+    }
+    
+    .bingo-cell {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .bingo-game-layout {
+        grid-template-columns: 1fr;
+    }
+    
+    .called-numbers-list {
+        grid-template-columns: repeat(4, 1fr);
+    }
+    
+    .bingo-board {
+        max-width: 250px;
+    }
+    
+    .bingo-cell {
+        font-size: 0.9rem;
+    }
+    
+    .called-number {
+        font-size: 0.8rem;
+        padding: 0.3rem;
+    }
+}
+
 /* Connect the Dots Game Styles */
 .connect-dots-game-info {
     display: flex;

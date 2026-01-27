@@ -70,14 +70,15 @@
                         </div>
                     </div>
                     
-                    <div class="game-card coming-soon">
+                    <div class="game-card" onclick="openBingo()">
                         <div class="game-icon">
                             <i class="fas fa-dice"></i>
                         </div>
                         <h3>Bingo</h3>
-                        <p>Coming Soon</p>
+                        <p>Host or join a Bingo game with friends!</p>
                         <div class="game-features">
-                            <span class="feature disabled">Coming Soon</span>
+                            <span class="feature">Host Game</span>
+                            <span class="feature">Join Game</span>
                         </div>
                     </div>
                 </div>
@@ -301,7 +302,196 @@
         </div>
     </div>
 
+    <!-- Bingo Modal -->
+    <div id="bingoModal" class="modal">
+        <div class="modal-content bingo-modal-content">
+            <!-- Game Selection Screen -->
+            <div id="bingoGameSelection" class="bingo-game-selection">
+                <div class="modal-header">
+                    <h2>Bingo</h2>
+                    <button class="close-btn" onclick="closeBingo()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                
+                <div class="bingo-selection-content">
+                    <p class="bingo-selection-description">Choose how you want to play:</p>
+                    
+                    <div class="bingo-options">
+                        <div class="bingo-option" onclick="selectBingoMode('host')">
+                            <div class="bingo-icon">
+                                <i class="fas fa-crown"></i>
+                            </div>
+                            <h3>Host Game</h3>
+                            <p>Create a new Bingo game and invite friends</p>
+                            <div class="bingo-badge">Host</div>
+                        </div>
+                        
+                        <div class="bingo-option" onclick="selectBingoMode('join')">
+                            <div class="bingo-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <h3>Join Game</h3>
+                            <p>Join an existing Bingo game</p>
+                            <div class="bingo-badge">Join</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Host Game Screen -->
+            <div id="bingoHostScreen" class="bingo-host-screen" style="display: none;">
+                <div class="modal-header">
+                    <button class="back-btn" onclick="backToBingoSelection()">
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                    <h2>Host Bingo Game</h2>
+                    <button class="close-btn" onclick="closeBingo()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+
+                <div class="host-controls">
+                    <div class="game-info">
+                        <div class="game-id">
+                            <label>Game ID:</label>
+                            <span id="gameId">BINGO123</span>
+                            <button class="copy-btn" onclick="copyGameId()">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                        </div>
+                        <div class="player-count">
+                            <span>Players: </span>
+                            <span id="playerCount">1/5</span>
+                        </div>
+                    </div>
+
+                    <div class="players-list">
+                        <h3>Players Joined:</h3>
+                        <div id="playersList" class="players-list-content">
+                            <div class="player-item host-player">
+                                <i class="fas fa-crown"></i>
+                                <span>You (Host)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="host-actions">
+                        <button class="control-btn start-game-btn" onclick="startBingoGame()" disabled>
+                            <i class="fas fa-play"></i>
+                            Start Game
+                        </button>
+                        <button class="control-btn end-game-btn" onclick="endBingoGame()">
+                            <i class="fas fa-stop"></i>
+                            End Game
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Join Game Screen -->
+            <div id="bingoJoinScreen" class="bingo-join-screen" style="display: none;">
+                <div class="modal-header">
+                    <button class="back-btn" onclick="backToBingoSelection()">
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                    <h2>Join Bingo Game</h2>
+                    <button class="close-btn" onclick="closeBingo()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+
+                <div class="join-controls">
+                    <div class="join-form">
+                        <div class="form-group">
+                            <label for="gameIdInput">Enter Game ID:</label>
+                            <input type="text" id="gameIdInput" placeholder="BINGO123" maxlength="10">
+                        </div>
+                        <div class="form-group">
+                            <label for="playerNameInput">Your Name:</label>
+                            <input type="text" id="playerNameInput" placeholder="Enter your name" maxlength="20">
+                        </div>
+                        <button class="control-btn join-game-btn" onclick="joinBingoGame()">
+                            <i class="fas fa-sign-in-alt"></i>
+                            Join Game
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Game Screen -->
+            <div id="bingoGameScreen" class="bingo-game-screen" style="display: none;">
+                <div class="modal-header">
+                    <button class="back-btn" onclick="backToBingoSelection()">
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                    <h2 id="bingoGameTitle">Bingo Game</h2>
+                    <button class="close-btn" onclick="closeBingo()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+
+                <div class="bingo-game-info">
+                    <div class="current-number">
+                        <span>Current Number: </span>
+                        <span id="currentBingoNumber">-</span>
+                    </div>
+                    <div class="game-status">
+                        <span id="gameStatus">Waiting to start...</span>
+                    </div>
+                </div>
+
+                <div class="bingo-game-layout">
+                    <div class="bingo-board-container">
+                        <div class="bingo-board" id="bingoBoard">
+                            <!-- Bingo grid will be generated by JavaScript -->
+                        </div>
+                    </div>
+                    
+                    <div class="bingo-sidebar">
+                        <div class="called-numbers-section">
+                            <h3>Called Numbers</h3>
+                            <div class="called-numbers-list" id="calledNumbersList">
+                                <!-- Called numbers will be displayed here -->
+                            </div>
+                        </div>
+                        
+                        <div class="game-actions-section">
+                            <h3>Game Actions</h3>
+                            <div class="game-actions">
+                                <button class="control-btn call-bingo-btn" onclick="callBingo()" disabled>
+                                    <i class="fas fa-trophy"></i>
+                                    Call Bingo!
+                                </button>
+                                
+                                <button class="control-btn restart-vote-btn" onclick="voteRestart()" style="display: none;">
+                                    <i class="fas fa-redo"></i>
+                                    Vote to Restart
+                                </button>
+                                
+                                <button class="control-btn leave-game-btn" onclick="leaveBingoGame()">
+                                    <i class="fas fa-sign-out-alt"></i>
+                                    Leave Game
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="players-status-section" id="playersStatusSection" style="display: none;">
+                            <h3>Players Status</h3>
+                            <div class="players-status-list" id="playersStatusList">
+                                <!-- Players status will be displayed here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="bingoMessage" class="game-message"></div>
+            </div>
+        </div>
+    </div>
+
     <script src="script.js"></script>
     <script src="connect-dots.js"></script>
+    <script src="bingo.js"></script>
 </body>
 </html>
