@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Play Tic-Tac-Toe against an unbeatable AI opponent">
+    <title>Tic-Tac-Toe | Mini Games Arcade</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>❌</text></svg>">
+</head>
+
+<body>
+    <div class="page-wrapper">
+        <!-- Navigation Header -->
+        <header class="nav-header">
+            <div class="container">
+                <div class="nav-content">
+                    <a href="/" class="nav-logo">
+                        <span class="nav-logo-icon">🎮</span>
+                        <span class="title-gradient">Mini Games</span>
+                    </a>
+                    <a href="/" class="back-btn">
+                        <span>←</span>
+                        <span>Back to Games</span>
+                    </a>
+                </div>
+            </div>
+        </header>
+
+        <!-- Game Container -->
+        <main class="game-container">
+            <!-- Game Header -->
+            <div class="game-header">
+                <h1 class="game-title">
+                    <span class="title-gradient">Tic-Tac-Toe</span>
+                </h1>
+                <p class="game-subtitle">You are X, AI is O</p>
+            </div>
+
+            <!-- Score Board -->
+            <div class="scoreboard glass-card">
+                <div class="score-item player">
+                    <div class="score-label">You (X)</div>
+                    <div class="score-value" id="player-score">0</div>
+                </div>
+                <div class="score-item draws">
+                    <div class="score-label">Draws</div>
+                    <div class="score-value" id="draws-score">0</div>
+                </div>
+                <div class="score-item ai">
+                    <div class="score-label">AI (O)</div>
+                    <div class="score-value" id="ai-score">0</div>
+                </div>
+            </div>
+
+            <!-- Turn Indicator -->
+            <div class="turn-indicator player-turn" id="turn-indicator">
+                Your Turn
+            </div>
+
+            <!-- Game Board -->
+            <div class="ttt-board glass-card" id="game-board">
+                <button class="ttt-cell" data-index="0" aria-label="Cell 0"></button>
+                <button class="ttt-cell" data-index="1" aria-label="Cell 1"></button>
+                <button class="ttt-cell" data-index="2" aria-label="Cell 2"></button>
+                <button class="ttt-cell" data-index="3" aria-label="Cell 3"></button>
+                <button class="ttt-cell" data-index="4" aria-label="Cell 4"></button>
+                <button class="ttt-cell" data-index="5" aria-label="Cell 5"></button>
+                <button class="ttt-cell" data-index="6" aria-label="Cell 6"></button>
+                <button class="ttt-cell" data-index="7" aria-label="Cell 7"></button>
+                <button class="ttt-cell" data-index="8" aria-label="Cell 8"></button>
+            </div>
+
+            <!-- Game Controls -->
+            <div class="game-controls">
+                <button class="btn btn-primary" id="restart-btn">
+                    🔄 Restart Game
+                </button>
+                <button class="btn btn-secondary" id="reset-scores-btn">
+                    🗑️ Reset Scores
+                </button>
+            </div>
+        </main>
+
+        <!-- Winner Overlay -->
+        <div class="winner-overlay" id="winner-overlay">
+            <div class="winner-content">
+                <div class="winner-icon" id="winner-icon">🎉</div>
+                <h2 class="winner-title" id="winner-title">You Win!</h2>
+                <p class="winner-message" id="winner-message">Congratulations! You beat the AI!</p>
+                <div class="winner-buttons">
+                    <button class="btn btn-primary" id="play-again-btn">
+                        🔄 Play Again
+                    </button>
+                    <a href="/" class="btn btn-secondary">
+                        🏠 Back to Home
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="container">
+                <p>Mini Games Arcade &copy; 2026</p>
+            </div>
+        </footer>
+    </div>
+
+    <script src="js/tictactoe.js"></script>
+</body>
+
+</html>

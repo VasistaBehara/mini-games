@@ -1,0 +1,25 @@
+{
+    "name": "mini-games",
+    "version": "1.0.0",
+    "description": "A beautiful mini-games arcade with Tic-Tac-Toe and Bingo",
+    "main": "index.html",
+    "scripts": {
+        "dev": "live-server --port=8080 --open=/",
+        "start": "serve -s . -l 8080"
+    },
+    "keywords": [
+        "games",
+        "arcade",
+        "tictactoe",
+        "bingo"
+    ],
+    "author": "",
+    "license": "MIT",
+    "devDependencies": {
+        "live-server": "^1.2.2",
+        "serve": "^14.2.1"
+    },
+    "engines": {
+        "node": ">=14.0.0"
+    }
+}

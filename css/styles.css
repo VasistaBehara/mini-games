@@ -1,0 +1,1022 @@
+/* ========================================
+   MINI-GAMES ARCADE - Design System
+   ======================================== */
+
+/* Google Fonts Import */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
+/* ========================================
+   CSS Custom Properties (Design Tokens)
+   ======================================== */
+:root {
+    /* Color Palette - Premium Dark Theme */
+    --color-bg-primary: #0a0a0f;
+    --color-bg-secondary: #12121a;
+    --color-bg-tertiary: #1a1a2e;
+    --color-bg-card: rgba(26, 26, 46, 0.6);
+
+    /* Accent Colors */
+    --color-primary: #6366f1;
+    --color-primary-light: #818cf8;
+    --color-primary-dark: #4f46e5;
+    --color-secondary: #ec4899;
+    --color-secondary-light: #f472b6;
+    --color-accent: #06b6d4;
+    --color-accent-light: #22d3ee;
+
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, #6366f1 0%, #ec4899 50%, #06b6d4 100%);
+    --gradient-card: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(236, 72, 153, 0.1) 100%);
+    --gradient-glow: radial-gradient(ellipse at center, rgba(99, 102, 241, 0.3) 0%, transparent 70%);
+
+    /* Text Colors */
+    --color-text-primary: #ffffff;
+    --color-text-secondary: rgba(255, 255, 255, 0.7);
+    --color-text-muted: rgba(255, 255, 255, 0.5);
+
+    /* Game Colors */
+    --color-player-x: #06b6d4;
+    --color-player-o: #ec4899;
+    --color-win: #22c55e;
+    --color-lose: #ef4444;
+    --color-draw: #eab308;
+
+    /* Bingo Colors */
+    --color-bingo-b: #6366f1;
+    --color-bingo-i: #ec4899;
+    --color-bingo-n: #06b6d4;
+    --color-bingo-g: #22c55e;
+    --color-bingo-o: #f59e0b;
+    --color-marked: rgba(34, 197, 94, 0.3);
+
+    /* Effects */
+    --blur-glass: 20px;
+    --border-glass: 1px solid rgba(255, 255, 255, 0.1);
+    --shadow-glow: 0 0 40px rgba(99, 102, 241, 0.3);
+    --shadow-card: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+
+    /* Spacing */
+    --space-xs: 0.25rem;
+    --space-sm: 0.5rem;
+    --space-md: 1rem;
+    --space-lg: 1.5rem;
+    --space-xl: 2rem;
+    --space-2xl: 3rem;
+    --space-3xl: 4rem;
+
+    /* Typography */
+    --font-family: 'Poppins', system-ui, -apple-system, sans-serif;
+    --font-size-xs: 0.75rem;
+    --font-size-sm: 0.875rem;
+    --font-size-md: 1rem;
+    --font-size-lg: 1.25rem;
+    --font-size-xl: 1.5rem;
+    --font-size-2xl: 2rem;
+    --font-size-3xl: 3rem;
+    --font-size-4xl: 4rem;
+
+    /* Border Radius */
+    --radius-sm: 0.375rem;
+    --radius-md: 0.5rem;
+    --radius-lg: 1rem;
+    --radius-xl: 1.5rem;
+    --radius-full: 9999px;
+
+    /* Transitions */
+    --transition-fast: 150ms ease;
+    --transition-normal: 300ms ease;
+    --transition-slow: 500ms ease;
+}
+
+/* ========================================
+   Reset & Base Styles
+   ======================================== */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: var(--font-family);
+    background: var(--color-bg-primary);
+    color: var(--color-text-primary);
+    min-height: 100vh;
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+/* Animated Background */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background:
+        radial-gradient(ellipse at 20% 20%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 80%, rgba(236, 72, 153, 0.15) 0%, transparent 50%),
+        radial-gradient(ellipse at 50% 50%, rgba(6, 182, 212, 0.1) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: -1;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+button {
+    font-family: inherit;
+    cursor: pointer;
+    border: none;
+    background: none;
+}
+
+/* ========================================
+   Typography
+   ======================================== */
+.title-gradient {
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.text-glow {
+    text-shadow: 0 0 40px rgba(99, 102, 241, 0.5);
+}
+
+/* ========================================
+   Layout Components
+   ======================================== */
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 var(--space-lg);
+}
+
+.page-wrapper {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ========================================
+   Glass Card Effect
+   ======================================== */
+.glass-card {
+    background: var(--color-bg-card);
+    backdrop-filter: blur(var(--blur-glass));
+    -webkit-backdrop-filter: blur(var(--blur-glass));
+    border: var(--border-glass);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-card);
+}
+
+.glass-card-hover {
+    transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+}
+
+.glass-card-hover:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: var(--shadow-glow), var(--shadow-card);
+}
+
+/* ========================================
+   Buttons
+   ======================================== */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-sm);
+    padding: var(--space-md) var(--space-xl);
+    font-size: var(--font-size-md);
+    font-weight: 600;
+    border-radius: var(--radius-lg);
+    transition: all var(--transition-normal);
+}
+
+.btn-primary {
+    background: var(--gradient-primary);
+    color: white;
+    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(99, 102, 241, 0.5);
+}
+
+.btn-secondary {
+    background: var(--color-bg-tertiary);
+    color: var(--color-text-primary);
+    border: var(--border-glass);
+}
+
+.btn-secondary:hover {
+    background: var(--color-bg-card);
+    border-color: var(--color-primary);
+}
+
+.btn-icon {
+    width: 48px;
+    height: 48px;
+    padding: 0;
+    border-radius: var(--radius-full);
+}
+
+/* ========================================
+   Navigation Header
+   ======================================== */
+.nav-header {
+    padding: var(--space-lg) 0;
+    position: relative;
+    z-index: 100;
+}
+
+.nav-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.nav-logo {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    font-size: var(--font-size-xl);
+    font-weight: 700;
+}
+
+.nav-logo-icon {
+    font-size: var(--font-size-2xl);
+}
+
+.back-btn {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-md);
+    transition: color var(--transition-fast);
+}
+
+.back-btn:hover {
+    color: var(--color-primary-light);
+}
+
+/* ========================================
+   Hero Section (Home Page)
+   ======================================== */
+.hero {
+    text-align: center;
+    padding: var(--space-3xl) 0;
+}
+
+.hero-title {
+    font-size: clamp(2.5rem, 8vw, var(--font-size-4xl));
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin-bottom: var(--space-lg);
+    animation: fadeInUp 0.8s ease-out;
+}
+
+.hero-subtitle {
+    font-size: var(--font-size-lg);
+    color: var(--color-text-secondary);
+    max-width: 600px;
+    margin: 0 auto var(--space-xl);
+    animation: fadeInUp 0.8s ease-out 0.2s both;
+}
+
+/* ========================================
+   Game Grid (Home Page)
+   ======================================== */
+.games-section {
+    padding: var(--space-2xl) 0 var(--space-3xl);
+}
+
+.section-title {
+    font-size: var(--font-size-2xl);
+    font-weight: 700;
+    margin-bottom: var(--space-2xl);
+    text-align: center;
+}
+
+.games-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--space-xl);
+    animation: fadeInUp 0.8s ease-out 0.4s both;
+}
+
+/* ========================================
+   Game Card (Home Page)
+   ======================================== */
+.game-card {
+    position: relative;
+    padding: var(--space-2xl);
+    text-align: center;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.game-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--gradient-card);
+    opacity: 0;
+    transition: opacity var(--transition-normal);
+}
+
+.game-card:hover::before {
+    opacity: 1;
+}
+
+.game-icon {
+    font-size: 4rem;
+    margin-bottom: var(--space-lg);
+    display: block;
+}
+
+.game-card-title {
+    font-size: var(--font-size-xl);
+    font-weight: 700;
+    margin-bottom: var(--space-sm);
+}
+
+.game-card-description {
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-lg);
+}
+
+/* Game Mode Badges */
+.game-modes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+    justify-content: center;
+}
+
+.mode-badge {
+    padding: var(--space-xs) var(--space-md);
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+    border-radius: var(--radius-full);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.mode-badge.active {
+    background: rgba(34, 197, 94, 0.2);
+    color: #22c55e;
+    border: 1px solid rgba(34, 197, 94, 0.3);
+}
+
+.mode-badge.coming-soon {
+    background: rgba(234, 179, 8, 0.2);
+    color: #eab308;
+    border: 1px solid rgba(234, 179, 8, 0.3);
+}
+
+/* ========================================
+   Game Page Layout
+   ======================================== */
+.game-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-xl) 0;
+    gap: var(--space-xl);
+}
+
+.game-header {
+    text-align: center;
+}
+
+.game-title {
+    font-size: var(--font-size-2xl);
+    font-weight: 700;
+    margin-bottom: var(--space-sm);
+}
+
+.game-subtitle {
+    color: var(--color-text-secondary);
+}
+
+/* ========================================
+   Score Board
+   ======================================== */
+.scoreboard {
+    display: flex;
+    gap: var(--space-xl);
+    padding: var(--space-lg) var(--space-2xl);
+}
+
+.score-item {
+    text-align: center;
+    min-width: 100px;
+}
+
+.score-label {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: var(--space-xs);
+}
+
+.score-value {
+    font-size: var(--font-size-2xl);
+    font-weight: 700;
+}
+
+.score-item.player .score-value {
+    color: var(--color-player-x);
+}
+
+.score-item.ai .score-value {
+    color: var(--color-player-o);
+}
+
+.score-item.draws .score-value {
+    color: var(--color-draw);
+}
+
+/* ========================================
+   Tic-Tac-Toe Board
+   ======================================== */
+.ttt-board {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-md);
+    padding: var(--space-lg);
+}
+
+.ttt-cell {
+    width: 100px;
+    height: 100px;
+    background: var(--color-bg-tertiary);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--font-size-3xl);
+    font-weight: 800;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.ttt-cell:hover:not(.taken) {
+    background: var(--color-bg-card);
+    border-color: var(--color-primary);
+    transform: scale(1.05);
+}
+
+.ttt-cell.x {
+    color: var(--color-player-x);
+    text-shadow: 0 0 20px var(--color-player-x);
+}
+
+.ttt-cell.o {
+    color: var(--color-player-o);
+    text-shadow: 0 0 20px var(--color-player-o);
+}
+
+.ttt-cell.winning {
+    animation: pulse 0.5s ease infinite alternate;
+    background: rgba(34, 197, 94, 0.2);
+    border-color: var(--color-win);
+}
+
+/* ========================================
+   Turn Indicator
+   ======================================== */
+.turn-indicator {
+    font-size: var(--font-size-lg);
+    padding: var(--space-md) var(--space-xl);
+    border-radius: var(--radius-full);
+    background: var(--color-bg-tertiary);
+    border: var(--border-glass);
+}
+
+.turn-indicator.player-turn {
+    border-color: var(--color-player-x);
+    box-shadow: 0 0 20px rgba(6, 182, 212, 0.3);
+}
+
+.turn-indicator.ai-turn {
+    border-color: var(--color-player-o);
+    box-shadow: 0 0 20px rgba(236, 72, 153, 0.3);
+}
+
+/* ========================================
+   Bingo Board
+   ======================================== */
+/* ========================================
+   Bingo Board
+   ======================================== */
+.bingo-game-area {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: center;
+    gap: var(--space-2xl);
+    width: 100%;
+}
+
+.bingo-player-section {
+    text-align: center;
+    flex: 0 0 320px;
+    /* Fixed width to prevent shifting */
+}
+
+.bingo-player-label {
+    font-size: var(--font-size-lg);
+    font-weight: 600;
+    margin-bottom: var(--space-md);
+    padding: var(--space-sm) var(--space-lg);
+    border-radius: var(--radius-full);
+    display: inline-block;
+}
+
+.bingo-player-label.player {
+    background: rgba(6, 182, 212, 0.2);
+    color: var(--color-player-x);
+}
+
+.bingo-player-label.ai {
+    background: rgba(236, 72, 153, 0.2);
+    color: var(--color-player-o);
+}
+
+.bingo-card {
+    padding: var(--space-md);
+}
+
+.bingo-header {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: var(--space-xs);
+    margin-bottom: var(--space-sm);
+}
+
+.bingo-header-cell {
+    width: 45px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--font-size-lg);
+    font-weight: 800;
+    border-radius: var(--radius-sm);
+}
+
+.bingo-header-cell:nth-child(1) {
+    background: var(--color-bingo-b);
+}
+
+.bingo-header-cell:nth-child(2) {
+    background: var(--color-bingo-i);
+}
+
+.bingo-header-cell:nth-child(3) {
+    background: var(--color-bingo-n);
+}
+
+.bingo-header-cell:nth-child(4) {
+    background: var(--color-bingo-g);
+}
+
+.bingo-header-cell:nth-child(5) {
+    background: var(--color-bingo-o);
+}
+
+.bingo-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: var(--space-xs);
+}
+
+.bingo-cell {
+    width: 45px;
+    height: 45px;
+    background: var(--color-bg-tertiary);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--font-size-md);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.bingo-cell:hover:not(.marked):not(.free) {
+    border-color: var(--color-primary);
+    transform: scale(1.05);
+}
+
+.bingo-cell.free {
+    background: var(--gradient-primary);
+    font-size: var(--font-size-xs);
+    font-weight: 700;
+}
+
+.bingo-cell.marked {
+    background: var(--color-marked);
+    border-color: var(--color-win);
+    position: relative;
+}
+
+.bingo-cell.marked::after {
+    content: '';
+    position: absolute;
+    width: 25px;
+    height: 25px;
+    background: rgba(34, 197, 94, 0.5);
+    border-radius: var(--radius-full);
+}
+
+.bingo-cell.winning-cell {
+    animation: pulse 0.5s ease infinite alternate;
+    background: rgba(34, 197, 94, 0.4);
+}
+
+/* ========================================
+   Number Caller
+   ======================================== */
+.caller-section {
+    text-align: center;
+    padding: var(--space-xl) var(--space-2xl);
+    flex: 0 0 300px;
+    /* Fixed width */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+    align-self: center;
+}
+
+.caller-title {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: var(--space-md);
+}
+
+.current-call {
+    font-size: var(--font-size-4xl);
+    font-weight: 800;
+    margin-bottom: var(--space-lg);
+    min-height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.current-call .letter {
+    color: var(--color-primary-light);
+}
+
+.current-call .number {
+    color: var(--color-text-primary);
+}
+
+.call-btn {
+    width: 100%;
+    /* margin-bottom removed */
+}
+
+/* ========================================
+   Called Numbers History (New Section)
+   ======================================== */
+.called-numbers-section {
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: var(--space-lg);
+    margin-top: var(--space-xl);
+    /* No height restriction, allow it to grow if needed, or scroll */
+}
+
+.called-numbers-title {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: var(--space-md);
+    text-align: center;
+}
+
+.called-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xs);
+    justify-content: center;
+    /* Optional: Limit height and scroll if user wants, but user asked for "horizontal line" roughly */
+}
+
+.called-number {
+    padding: var(--space-xs) var(--space-md);
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    background: var(--color-bg-tertiary);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-sm);
+    color: var(--color-text-secondary);
+}
+
+/* ========================================
+   Game Controls
+   ======================================== */
+.game-controls {
+    display: flex;
+    gap: var(--space-md);
+    margin-top: var(--space-lg);
+}
+
+/* ========================================
+   Winner Overlay
+   ======================================== */
+.winner-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(10, 10, 15, 0.95);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: all var(--transition-normal);
+}
+
+.winner-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.winner-content {
+    text-align: center;
+    animation: scaleIn 0.5s ease-out;
+}
+
+.winner-icon {
+    font-size: 6rem;
+    margin-bottom: var(--space-lg);
+    animation: bounce 1s ease infinite;
+}
+
+.winner-title {
+    font-size: var(--font-size-3xl);
+    font-weight: 800;
+    margin-bottom: var(--space-md);
+}
+
+.winner-title.win {
+    color: var(--color-win);
+    text-shadow: 0 0 40px rgba(34, 197, 94, 0.5);
+}
+
+.winner-title.lose {
+    color: var(--color-lose);
+    text-shadow: 0 0 40px rgba(239, 68, 68, 0.5);
+}
+
+.winner-title.draw {
+    color: var(--color-draw);
+    text-shadow: 0 0 40px rgba(234, 179, 8, 0.5);
+}
+
+.winner-message {
+    font-size: var(--font-size-lg);
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-2xl);
+}
+
+.winner-buttons {
+    display: flex;
+    gap: var(--space-md);
+    justify-content: center;
+}
+
+/* ========================================
+   Animations
+   ======================================== */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes pulse {
+    from {
+        transform: scale(1);
+    }
+
+    to {
+        transform: scale(1.05);
+        box-shadow: 0 0 30px rgba(34, 197, 94, 0.5);
+    }
+}
+
+@keyframes bounce {
+
+    0%,
+    20%,
+    50%,
+    80%,
+    100% {
+        transform: translateY(0);
+    }
+
+    40% {
+        transform: translateY(-20px);
+    }
+
+    60% {
+        transform: translateY(-10px);
+    }
+}
+
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+/* Cell Animation */
+.ttt-cell.animate {
+    animation: scaleIn 0.3s ease-out;
+}
+
+/* ========================================
+   Responsive Design
+   ======================================== */
+@media (max-width: 768px) {
+    .games-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .ttt-cell {
+        width: 80px;
+        height: 80px;
+        font-size: var(--font-size-2xl);
+    }
+
+    .scoreboard {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: var(--space-md);
+    }
+
+    .bingo-game-area {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    /* Reset fixed widths for mobile */
+    .bingo-player-section,
+    .caller-section {
+        flex: 1 1 auto;
+        width: 100%;
+        max-width: 400px;
+        /* Optional: keep them from getting too wide */
+    }
+
+    .bingo-cell {
+        width: 45px;
+        height: 45px;
+        font-size: var(--font-size-sm);
+    }
+
+    .bingo-header-cell {
+        width: 45px;
+        height: 35px;
+    }
+
+    .caller-section {
+        min-width: 100%;
+        margin: var(--space-lg) 0;
+        /* Add spacing when stacked */
+    }
+
+    .hero-title {
+        font-size: var(--font-size-2xl);
+    }
+
+    .winner-title {
+        font-size: var(--font-size-2xl);
+    }
+
+    .winner-icon {
+        font-size: 4rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 0 var(--space-md);
+    }
+
+    .ttt-cell {
+        width: 70px;
+        height: 70px;
+    }
+
+    .bingo-cell {
+        width: 40px;
+        height: 40px;
+        font-size: var(--font-size-xs);
+    }
+
+    .bingo-header-cell {
+        width: 40px;
+        height: 30px;
+        font-size: var(--font-size-md);
+    }
+
+    .btn {
+        padding: var(--space-sm) var(--space-lg);
+        font-size: var(--font-size-sm);
+    }
+}
+
+/* ========================================
+   Scrollbar Styling
+   ======================================== */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--color-bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--color-bg-tertiary);
+    border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--color-primary-dark);
+}
+
+/* ========================================
+   Footer
+   ======================================== */
+.footer {
+    text-align: center;
+    padding: var(--space-xl) 0;
+    color: var(--color-text-muted);
+    font-size: var(--font-size-sm);
+    margin-top: auto;
+}
