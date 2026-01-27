@@ -2,6 +2,7 @@
  * Tic-Tac-Toe Game
  * Features:
  * - Minimax AI algorithm (unbeatable)
+ * - Two-player local mode
  * - Score tracking with localStorage
  * - Winner detection and celebration
  * - Quick restart functionality
@@ -11,9 +12,10 @@ class TicTacToe {
     constructor() {
         // Game state
         this.board = Array(9).fill(null);
-        this.currentPlayer = 'X'; // X = Player, O = AI
+        this.currentPlayer = 'X';
         this.gameActive = true;
         this.winningCombination = null;
+        this.gameMode = 'ai'; // 'ai' or '2p'
 
         // Winning combinations
         this.winPatterns = [
@@ -43,6 +45,11 @@ class TicTacToe {
         this.restartBtn = document.getElementById('restart-btn');
         this.resetScoresBtn = document.getElementById('reset-scores-btn');
         this.playAgainBtn = document.getElementById('play-again-btn');
+        this.modeAiBtn = document.getElementById('mode-ai');
+        this.mode2pBtn = document.getElementById('mode-2p');
+        this.p1Label = document.getElementById('p1-label');
+        this.p2Label = document.getElementById('p2-label');
+        this.gameSubtitle = document.getElementById('game-subtitle');
 
         // Initialize
         this.init();
@@ -58,34 +65,74 @@ class TicTacToe {
         this.resetScoresBtn.addEventListener('click', () => this.resetScores());
         this.playAgainBtn.addEventListener('click', () => this.closeOverlayAndRestart());
 
+        // Mode selection
+        this.modeAiBtn.addEventListener('click', () => this.setMode('ai'));
+        this.mode2pBtn.addEventListener('click', () => this.setMode('2p'));
+
         // Update score display
         this.updateScoreDisplay();
+        this.updateLabels();
+    }
+
+    setMode(mode) {
+        this.gameMode = mode;
+
+        // Update button states
+        this.modeAiBtn.classList.toggle('active', mode === 'ai');
+        this.mode2pBtn.classList.toggle('active', mode === '2p');
+
+        // Update labels
+        this.updateLabels();
+
+        // Reset scores for new mode
+        this.resetScores();
+        this.resetGame();
+    }
+
+    updateLabels() {
+        if (this.gameMode === 'ai') {
+            this.p1Label.textContent = 'You (X)';
+            this.p2Label.textContent = 'AI (O)';
+            this.gameSubtitle.textContent = 'You are X, AI is O';
+        } else {
+            this.p1Label.textContent = 'Player 1 (X)';
+            this.p2Label.textContent = 'Player 2 (O)';
+            this.gameSubtitle.textContent = 'Player 1 is X, Player 2 is O';
+        }
+        this.updateTurnIndicator();
     }
 
     handleCellClick(e) {
         const index = parseInt(e.target.dataset.index);
 
         // Check if valid move
-        if (!this.gameActive || this.board[index] || this.currentPlayer !== 'X') {
+        if (!this.gameActive || this.board[index]) {
             return;
         }
 
-        // Make player move
-        this.makeMove(index, 'X');
+        // In AI mode, only allow clicks when it's X's turn
+        if (this.gameMode === 'ai' && this.currentPlayer !== 'X') {
+            return;
+        }
+
+        // Make move
+        this.makeMove(index, this.currentPlayer);
 
         // Check for game end
         if (this.checkGameEnd()) return;
 
-        // AI's turn
-        this.currentPlayer = 'O';
+        // Switch player
+        this.currentPlayer = this.currentPlayer === 'X' ? 'O' : 'X';
         this.updateTurnIndicator();
 
-        // AI makes move after a short delay
-        setTimeout(() => {
-            if (this.gameActive) {
-                this.aiMove();
-            }
-        }, 500);
+        // If AI mode and it's O's turn, AI makes move
+        if (this.gameMode === 'ai' && this.currentPlayer === 'O') {
+            setTimeout(() => {
+                if (this.gameActive) {
+                    this.aiMove();
+                }
+            }, 500);
+        }
     }
 
     makeMove(index, player) {
@@ -195,13 +242,13 @@ class TicTacToe {
 
         if (xWins) {
             this.winningCombination = xWins;
-            this.endGame('win');
+            this.endGame('x');
             return true;
         }
 
         if (oWins) {
             this.winningCombination = oWins;
-            this.endGame('lose');
+            this.endGame('o');
             return true;
         }
 
@@ -225,10 +272,10 @@ class TicTacToe {
         }
 
         // Update scores
-        if (result === 'win') {
-            this.scores.player++;
-        } else if (result === 'lose') {
-            this.scores.ai++;
+        if (result === 'x') {
+            this.scores.player++; // X always stored as player
+        } else if (result === 'o') {
+            this.scores.ai++; // O always stored as ai
         } else {
             this.scores.draws++;
         }
@@ -243,26 +290,51 @@ class TicTacToe {
     }
 
     showWinnerOverlay(result) {
-        const config = {
-            win: {
-                icon: '🎉',
-                title: 'You Win!',
-                message: 'Amazing! You beat the AI!',
-                titleClass: 'win'
-            },
-            lose: {
-                icon: '🤖',
-                title: 'AI Wins!',
-                message: 'The AI got the better of you this time.',
-                titleClass: 'lose'
-            },
-            draw: {
-                icon: '🤝',
-                title: "It's a Draw!",
-                message: 'Great minds think alike!',
-                titleClass: 'draw'
-            }
-        };
+        let config;
+
+        if (this.gameMode === 'ai') {
+            config = {
+                x: {
+                    icon: '🎉',
+                    title: 'You Win!',
+                    message: 'Amazing! You beat the AI!',
+                    titleClass: 'win'
+                },
+                o: {
+                    icon: '🤖',
+                    title: 'AI Wins!',
+                    message: 'The AI got the better of you this time.',
+                    titleClass: 'lose'
+                },
+                draw: {
+                    icon: '🤝',
+                    title: "It's a Draw!",
+                    message: 'Great minds think alike!',
+                    titleClass: 'draw'
+                }
+            };
+        } else {
+            config = {
+                x: {
+                    icon: '🎉',
+                    title: 'Player 1 Wins!',
+                    message: 'X takes the victory!',
+                    titleClass: 'win'
+                },
+                o: {
+                    icon: '🎉',
+                    title: 'Player 2 Wins!',
+                    message: 'O takes the victory!',
+                    titleClass: 'win'
+                },
+                draw: {
+                    icon: '🤝',
+                    title: "It's a Draw!",
+                    message: 'Nobody wins this round!',
+                    titleClass: 'draw'
+                }
+            };
+        }
 
         const { icon, title, message, titleClass } = config[result];
 
@@ -302,12 +374,22 @@ class TicTacToe {
     }
 
     updateTurnIndicator() {
-        if (this.currentPlayer === 'X') {
-            this.turnIndicator.textContent = 'Your Turn';
-            this.turnIndicator.className = 'turn-indicator player-turn';
+        if (this.gameMode === 'ai') {
+            if (this.currentPlayer === 'X') {
+                this.turnIndicator.textContent = 'Your Turn';
+                this.turnIndicator.className = 'turn-indicator player-turn';
+            } else {
+                this.turnIndicator.textContent = "AI's Turn";
+                this.turnIndicator.className = 'turn-indicator ai-turn';
+            }
         } else {
-            this.turnIndicator.textContent = "AI's Turn";
-            this.turnIndicator.className = 'turn-indicator ai-turn';
+            if (this.currentPlayer === 'X') {
+                this.turnIndicator.textContent = "Player 1's Turn (X)";
+                this.turnIndicator.className = 'turn-indicator player-turn';
+            } else {
+                this.turnIndicator.textContent = "Player 2's Turn (O)";
+                this.turnIndicator.className = 'turn-indicator ai-turn';
+            }
         }
     }
 

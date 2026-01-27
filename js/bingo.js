@@ -4,6 +4,7 @@
  * - Random card generation (B:1-15, I:16-30, N:31-45, G:46-60, O:61-75)
  * - Number calling system
  * - AI opponent with automatic marking
+ * - Two-player local mode
  * - Bingo detection (rows, columns, diagonals, four corners)
  * - Score tracking with localStorage
  */
@@ -22,20 +23,21 @@ class BingoGame {
 
         // Game state
         this.playerCard = [];
-        this.aiCard = [];
+        this.player2Card = [];
         this.calledNumbers = [];
         this.availableNumbers = [];
         this.playerMarked = new Set();
-        this.aiMarked = new Set();
+        this.player2Marked = new Set();
         this.gameActive = true;
         this.currentNumber = null;
+        this.gameMode = 'ai'; // 'ai' or '2p'
 
         // Scores
         this.scores = this.loadScores();
 
         // DOM Elements
         this.playerCardEl = document.getElementById('player-card');
-        this.aiCardEl = document.getElementById('ai-card');
+        this.player2CardEl = document.getElementById('ai-card');
         this.currentCallEl = document.getElementById('current-call');
         this.calledListEl = document.getElementById('called-list');
         this.callBtn = document.getElementById('call-btn');
@@ -47,7 +49,17 @@ class BingoGame {
         this.winnerTitle = document.getElementById('winner-title');
         this.winnerMessage = document.getElementById('winner-message');
         this.playerScoreEl = document.getElementById('player-score');
-        this.aiScoreEl = document.getElementById('ai-score');
+        this.player2ScoreEl = document.getElementById('ai-score');
+        this.modeAiBtn = document.getElementById('mode-ai');
+        this.mode2pBtn = document.getElementById('mode-2p');
+        this.p1Label = document.getElementById('p1-label');
+        this.p2Label = document.getElementById('p2-label');
+        this.card1Label = document.getElementById('card1-label');
+        this.card2Label = document.getElementById('card2-label');
+        this.gameSubtitle = document.getElementById('game-subtitle');
+        this.p1AutoMark = document.getElementById('p1-auto-mark');
+        this.p2AutoMark = document.getElementById('p2-auto-mark');
+        this.p2AutoMarkLabel = document.getElementById('p2-auto-mark-label');
 
         // Initialize
         this.init();
@@ -63,15 +75,55 @@ class BingoGame {
         this.resetScoresBtn.addEventListener('click', () => this.resetScores());
         this.playAgainBtn.addEventListener('click', () => this.closeOverlayAndRestart());
 
+        // Mode selection
+        this.modeAiBtn.addEventListener('click', () => this.setMode('ai'));
+        this.mode2pBtn.addEventListener('click', () => this.setMode('2p'));
+
         // Update display
         this.updateScoreDisplay();
+        this.updateLabels();
+    }
+
+    setMode(mode) {
+        this.gameMode = mode;
+
+        // Update button states
+        this.modeAiBtn.classList.toggle('active', mode === 'ai');
+        this.mode2pBtn.classList.toggle('active', mode === '2p');
+
+        // Update labels
+        this.updateLabels();
+
+        // Reset and start new game
+        this.resetScores();
+        this.startNewGame();
+    }
+
+    updateLabels() {
+        if (this.gameMode === 'ai') {
+            this.p1Label.textContent = 'Your Wins';
+            this.p2Label.textContent = 'AI Wins';
+            this.card1Label.textContent = 'Your Card';
+            this.card2Label.textContent = "AI's Card";
+            this.gameSubtitle.textContent = 'Race the AI to complete a line first!';
+            // Hide P2 auto-mark in AI mode (AI always auto-marks)
+            this.p2AutoMarkLabel.style.display = 'none';
+        } else {
+            this.p1Label.textContent = 'Player 1 Wins';
+            this.p2Label.textContent = 'Player 2 Wins';
+            this.card1Label.textContent = 'Player 1';
+            this.card2Label.textContent = 'Player 2';
+            this.gameSubtitle.textContent = 'Two players race to complete a line first!';
+            // Show P2 auto-mark in 2P mode
+            this.p2AutoMarkLabel.style.display = 'flex';
+        }
     }
 
     startNewGame() {
         // Reset state
         this.calledNumbers = [];
         this.playerMarked = new Set();
-        this.aiMarked = new Set();
+        this.player2Marked = new Set();
         this.gameActive = true;
         this.currentNumber = null;
 
@@ -81,15 +133,15 @@ class BingoGame {
 
         // Generate new cards
         this.playerCard = this.generateCard();
-        this.aiCard = this.generateCard();
+        this.player2Card = this.generateCard();
 
         // Mark free space
         this.playerMarked.add('FREE');
-        this.aiMarked.add('FREE');
+        this.player2Marked.add('FREE');
 
-        // Render cards
-        this.renderCard(this.playerCardEl, this.playerCard, true);
-        this.renderCard(this.aiCardEl, this.aiCard, false);
+        // Render cards (both clickable in 2p mode)
+        this.renderCard(this.playerCardEl, this.playerCard, 'player');
+        this.renderCard(this.player2CardEl, this.player2Card, this.gameMode === '2p' ? 'player2' : 'ai');
 
         // Reset display
         this.currentCallEl.innerHTML = '<span class="number">--</span>';
@@ -129,7 +181,7 @@ class BingoGame {
         return card;
     }
 
-    renderCard(container, card, isPlayer) {
+    renderCard(container, card, owner) {
         container.innerHTML = '';
 
         for (let row = 0; row < 5; row++) {
@@ -140,6 +192,7 @@ class BingoGame {
                 cell.dataset.col = col;
                 cell.dataset.row = row;
                 cell.dataset.value = value;
+                cell.dataset.owner = owner;
 
                 if (value === 'FREE') {
                     cell.classList.add('free', 'marked');
@@ -148,8 +201,9 @@ class BingoGame {
                     cell.textContent = value;
                 }
 
-                if (isPlayer) {
-                    cell.addEventListener('click', (e) => this.handleCellClick(e));
+                // Make clickable for human players
+                if (owner === 'player' || owner === 'player2') {
+                    cell.addEventListener('click', (e) => this.handleCellClick(e, owner));
                 }
 
                 container.appendChild(cell);
@@ -157,7 +211,7 @@ class BingoGame {
         }
     }
 
-    handleCellClick(e) {
+    handleCellClick(e, owner) {
         if (!this.gameActive) return;
 
         const cell = e.target;
@@ -165,7 +219,7 @@ class BingoGame {
 
         // Check if this number has been called
         if (value !== 'FREE' && !this.calledNumbers.includes(parseInt(value))) {
-            // Number hasn't been called yet - shake animation or feedback
+            // Number hasn't been called yet - visual feedback
             cell.style.animation = 'none';
             cell.offsetHeight; // Trigger reflow
             cell.style.animation = 'pulse 0.3s ease';
@@ -175,11 +229,15 @@ class BingoGame {
         // Mark the cell
         if (!cell.classList.contains('marked')) {
             cell.classList.add('marked');
-            this.playerMarked.add(value === 'FREE' ? 'FREE' : parseInt(value));
+
+            const markedSet = owner === 'player' ? this.playerMarked : this.player2Marked;
+            const card = owner === 'player' ? this.playerCard : this.player2Card;
+
+            markedSet.add(value === 'FREE' ? 'FREE' : parseInt(value));
 
             // Check for bingo
-            if (this.checkBingo(this.playerCard, this.playerMarked)) {
-                this.endGame('player');
+            if (this.checkBingo(card, markedSet)) {
+                this.endGame(owner);
             }
         }
     }
@@ -207,14 +265,55 @@ class BingoGame {
         calledEl.textContent = `${letter}${number}`;
         this.calledListEl.appendChild(calledEl);
 
-        // AI marks automatically after a delay
-        setTimeout(() => {
-            this.aiMarkNumber(number);
-        }, 300);
+        // Auto-mark for Player 1 if enabled
+        if (this.p1AutoMark.checked) {
+            setTimeout(() => {
+                this.autoMarkNumber(number, 'player');
+            }, 300);
+        }
+
+        // AI marks automatically OR Player 2 auto-mark if enabled
+        if (this.gameMode === 'ai') {
+            setTimeout(() => {
+                this.aiMarkNumber(number);
+            }, 300);
+        } else if (this.p2AutoMark.checked) {
+            setTimeout(() => {
+                this.autoMarkNumber(number, 'player2');
+            }, 300);
+        }
 
         // Check if all numbers called
         if (this.availableNumbers.length === 0) {
             this.callBtn.disabled = true;
+        }
+    }
+
+    autoMarkNumber(number, owner) {
+        if (!this.gameActive) return;
+
+        const card = owner === 'player' ? this.playerCard : this.player2Card;
+        const cardEl = owner === 'player' ? this.playerCardEl : this.player2CardEl;
+        const markedSet = owner === 'player' ? this.playerMarked : this.player2Marked;
+        const col = this.getColumnIndex(number);
+
+        for (let row = 0; row < 5; row++) {
+            if (card[col][row] === number) {
+                // Mark the cell
+                markedSet.add(number);
+
+                // Update UI
+                const cells = cardEl.querySelectorAll('.bingo-cell');
+                const cellIndex = row * 5 + col;
+                cells[cellIndex].classList.add('marked');
+
+                // Check for bingo
+                if (this.checkBingo(card, markedSet)) {
+                    this.endGame(owner);
+                }
+
+                break;
+            }
         }
     }
 
@@ -225,17 +324,17 @@ class BingoGame {
         const col = this.getColumnIndex(number);
 
         for (let row = 0; row < 5; row++) {
-            if (this.aiCard[col][row] === number) {
+            if (this.player2Card[col][row] === number) {
                 // Mark on AI's card
-                this.aiMarked.add(number);
+                this.player2Marked.add(number);
 
                 // Update UI
-                const cells = this.aiCardEl.querySelectorAll('.bingo-cell');
+                const cells = this.player2CardEl.querySelectorAll('.bingo-cell');
                 const cellIndex = row * 5 + col;
                 cells[cellIndex].classList.add('marked');
 
                 // Check for AI bingo
-                if (this.checkBingo(this.aiCard, this.aiMarked)) {
+                if (this.checkBingo(this.player2Card, this.player2Marked)) {
                     this.endGame('ai');
                 }
 
@@ -348,16 +447,31 @@ class BingoGame {
     }
 
     showWinnerOverlay(winner) {
-        if (winner === 'player') {
-            this.winnerIcon.textContent = '🎉';
-            this.winnerTitle.textContent = 'BINGO!';
-            this.winnerTitle.className = 'winner-title win';
-            this.winnerMessage.textContent = 'You got Bingo first! Congratulations!';
+        if (this.gameMode === 'ai') {
+            if (winner === 'player') {
+                this.winnerIcon.textContent = '🎉';
+                this.winnerTitle.textContent = 'BINGO!';
+                this.winnerTitle.className = 'winner-title win';
+                this.winnerMessage.textContent = 'You got Bingo first! Congratulations!';
+            } else {
+                this.winnerIcon.textContent = '🤖';
+                this.winnerTitle.textContent = 'AI Wins!';
+                this.winnerTitle.className = 'winner-title lose';
+                this.winnerMessage.textContent = 'The AI got Bingo first. Try again!';
+            }
         } else {
-            this.winnerIcon.textContent = '🤖';
-            this.winnerTitle.textContent = 'AI Wins!';
-            this.winnerTitle.className = 'winner-title lose';
-            this.winnerMessage.textContent = 'The AI got Bingo first. Try again!';
+            // 2 Player mode
+            if (winner === 'player') {
+                this.winnerIcon.textContent = '🎉';
+                this.winnerTitle.textContent = 'Player 1 BINGO!';
+                this.winnerTitle.className = 'winner-title win';
+                this.winnerMessage.textContent = 'Player 1 completed a line first!';
+            } else {
+                this.winnerIcon.textContent = '🎉';
+                this.winnerTitle.textContent = 'Player 2 BINGO!';
+                this.winnerTitle.className = 'winner-title win';
+                this.winnerMessage.textContent = 'Player 2 completed a line first!';
+            }
         }
 
         this.winnerOverlay.classList.add('active');
@@ -376,7 +490,7 @@ class BingoGame {
 
     updateScoreDisplay() {
         this.playerScoreEl.textContent = this.scores.player;
-        this.aiScoreEl.textContent = this.scores.ai;
+        this.player2ScoreEl.textContent = this.scores.ai;
     }
 
     loadScores() {
